@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Journal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    textarea { width: 100%; height: 100px; margin-top: 0.5rem; }
+    .entry { border: 1px solid #ccc; padding: 1rem; margin-top: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>📓 My Journal</h1>
+
+  <form id="journalForm">
+    <input type="text" id="title" placeholder="Entry title" required><br>
+    <textarea id="content" placeholder="Write your thoughts..." required></textarea><br>
+    <button type="submit">Save Entry</button>
+  </form>
+
+  <h2>Entries</h2>
+  <div id="entries"></div>
+
+  <script>
+    // Replace this with your deployed FastAPI backend URL
+    const API_URL = "https://your-fastapi-app.onrender.com";
+
+    async function fetchEntries() {
+      const res = await fetch(`${API_URL}/journal/`);
+      const data = await res.json();
+      const container = document.getElementById("entries");
+      container.innerHTML = "";
+      data.entries.forEach(entry => {
+        container.innerHTML += `
+          <div class="entry">
+            <h3>${entry.title}</h3>
+            <p>${entry.content}</p>
+          </div>`;
+      });
+    }
+
+    document.getElementById("journalForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+
+      await fetch(`${API_URL}/journal/`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({title, content})
+      });
+
+      document.getElementById("journalForm").reset();
+      fetchEntries();
+    });
+
+    fetchEntries();
+  </script>
+</body>
+</html>
