@@ -6,10 +6,20 @@
     body { font-family: Arial, sans-serif; margin: 2rem; }
     textarea { width: 100%; height: 100px; margin-top: 0.5rem; }
     .entry { border: 1px solid #ccc; padding: 1rem; margin-top: 1rem; border-radius: 8px; }
+    
+    /* --- CHANGE 1: ADDED THIS STYLE --- */
+    .summary {
+      background-color: #eef7ff;
+      border-left: 4px solid #3498db;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      font-style: italic;
+      color: #333;
+    }
   </style>
 </head>
 <body>
-  <h1>📓 My Journal</h1>
+  <h1>My Journal</h1>
 
   <form id="journalForm">
     <input type="text" id="title" placeholder="Entry title" required><br>
@@ -20,7 +30,6 @@
   <h2>Entries</h2>
   <div id="entries"></div>
   <script>
-    // Replace this with your deployed FastAPI backend URL
     const API_URL = "http://127.0.0.1:8000";
 
     async function fetchEntries() {
@@ -33,10 +42,14 @@
         const container = document.getElementById("entries");
         container.innerHTML = "";
         data.entries.forEach(entry => {
+          /* --- CHANGE 2: UPDATED THIS BLOCK --- */
           container.innerHTML += `
             <div class="entry">
               <h3>${entry.title}</h3>
               <p>${entry.content}</p>
+              <div class="summary">
+                <strong>AI Summary:</strong> ${entry.summary}
+              </div>
             </div>`;
         });
       } catch (error) {
@@ -61,14 +74,12 @@
         }
 
         document.getElementById("journalForm").reset();
-        // This is the key change: call fetchEntries() after a successful post
         fetchEntries(); 
       } catch (error) {
         console.error("Failed to save entry:", error);
       }
     });
 
-    // Initial fetch of entries when the page first loads
     fetchEntries();
 </script>
 </body>

@@ -1,0 +1,22 @@
+# Ignore Python cache and environment files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore OS generated files
+.DS_Storezz
+
+# Ignore virtual environments
+.venv/
+.env/
+
+# Ignore logs
+*.log
+
+# Ignore node modules (if any)
+node_modules/
